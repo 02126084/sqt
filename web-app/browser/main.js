@@ -9,6 +9,7 @@ document.documentElement.style.setProperty("--grid-rows", grid_rows);
 document.documentElement.style.setProperty("--grid-columns", grid_columns);
 
 const grid = document.getElementById("grid");
+const sidegrid = document.getElementById("sidegrid");
 
 const range = (n) => Array.from({"length": n}, (ignore, k) => k);
 
@@ -51,6 +52,45 @@ const update_grid = function () {
     );
 };
 
+const sidecells = range(2).map(function () {
+    const row = document.createElement("div");
+    row.className = "row";
+
+    const rows = range(4).map(function () {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+
+        row.append(cell);
+
+        return cell;
+    });
+
+    sidegrid.append(row);
+    return rows;
+});
+
+const update_sidegrid = function () {
+    sidecells.forEach(function (line, line_index) {
+        line.forEach(function (block, column_index) {
+            const cell = sidecells[line_index][column_index];
+            cell.className = `cell sidebar`;
+        });
+    });
+
+    Tetris.tetromino_coordiates(game.next_tetromino, [1, 0]).forEach(
+        function (coord) {
+            try {
+                const cell = sidecells[coord[1]][coord[0]];
+                cell.className = (
+                    `cell ${game.next_tetromino.block_type}`
+                );
+            } catch (ignore) {
+
+            }
+        }
+    );
+};
+
 // Don't allow the player to hold down the rotate key.
 let key_locked = false;
 
@@ -75,15 +115,20 @@ document.body.onkeydown = function (event) {
     if (event.key === " ") {
         game = Tetris.hard_drop(game);
     }
+    if (event.key === "c") {
+        game = Tetris.hold(game);
+    }
     update_grid();
 };
 
 const timer_function = function () {
     game = Tetris.next_turn(game);
+    update_sidegrid();
     update_grid();
     setTimeout(timer_function, 500);
 };
 
 setTimeout(timer_function, 500);
-
+update_sidegrid();
 update_grid();
+

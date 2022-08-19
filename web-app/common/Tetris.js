@@ -18,9 +18,10 @@ const Tetris = Object.create(null);
  * how to generate next pieces, and score.
  * @typedef {object} Game
  * @memberof Tetris
+ * @property {Tetris.Game} held_tetromino The tetromino you are holding
+ * @property {Tetris.Game} can_hold a boolean that determines if holding is allowed
  * @property {Tetris.Tetromino_bag} bag New pieces get drawn from the bag.
- * @property {Tetris.Tetromino} current_tetromino
- *     The tetromino in play descending in the field.
+ * @property {Tetris.Tetromino} current_tetromino The tetromino in play descending in the field.
  * @property {Tetris.Field} field The grid containing locked in pieces.
  * @property {boolean} game_over Whether this game has ended.
  * @property {Tetris.Tetromino} next_tetromino The next piece to descend.
@@ -305,7 +306,10 @@ Tetris.new_game = function () {
         "game_over": false,
         "next_tetromino": next_tetromino,
         "position": starting_position,
-        "score": new_score()
+        "score": new_score(), 
+        "can_hold": true,
+        "held_tetromino": undefined,
+        
     };
 };
 
@@ -520,6 +524,7 @@ Tetris.hard_drop = function (game) {
     const dropped_once = drop_once(game);
     if (R.equals(game, dropped_once)) {
         return Tetris.next_turn(game);
+
     }
     return Tetris.hard_drop(dropped_once);
 };
@@ -594,8 +599,57 @@ Tetris.next_turn = function (game) {
         "game_over": false,
         "next_tetromino": next_tetromino,
         "position": starting_position,
-        "score": game.score
+        "score": game.score,
+        "can_hold": game.can_hold,
+        "held_tetromino": game.held_tetromino,
+        
     };
+};
+
+const holdPiece = state => {
+    if (state.current!=null && !state.justHeld) {
+      if(state.hold == null) {
+        state.hold = state.current
+        Game.updateCurrent(Game.getNextPiece(state), state)
+      } else {
+        let temp = state.current
+        Game.updateCurrent(state.hold, state)
+        state.hold = temp
+      }
+      state.justHeld = true
+      state.hold.i = state.hold.cons==Tetromino.I ? Game.SPAWN_LOC[0] :  Game.SPAWN_LOC[0]
+      state.hold.j = state.hold.cons==Tetromino.I ? Game.SPAWN_LOC[1]-1 :  Game.SPAWN_LOC[1]
+      state.hold.rot = 0
+    }
+}
+
+/**
+ * This function allows you to hold a piece by pressing the 'c' key
+ * @function
+ * @memberof Tetris
+ * @param {Tetris.Game} game
+ * @returns {Tetris.Game}
+ */
+Tetris.hold = function (game) {
+    if (Tetris.is_game_over(game)) {
+        return game;
+    }
+    console.log(game.held_tetromino===undefined)
+    if (game.held_tetromino===undefined) {
+        game = R.mergeRight(game, {"held_tetromino": game.current_tetromino});
+
+        game = R.mergeRight(game, {"current_tetromino": game.next_tetromino});
+        const [next_tetromino, next_bag] = game.bag();
+        game = R.mergeRight(game, {"bag": next_bag});
+        game = R.mergeRight(game, {"next_tetromino": next_tetromino});
+    }
+    else {
+        const temp = game.current_tetromino
+        game = R.mergeRight(game, {"current_tetromino": game.held_tetromino});
+        game = R.mergeRight(game, {"held_tetromino": temp});
+    }
+    return game
+    
 };
 
 /**

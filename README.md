@@ -12,10 +12,11 @@ This assignment will have you implement some additional features,
 which are targeted to the module assessment criteria.
 
 ## Tasks ##
+
 ### Colourful blocks
 In Tetris, each piece has a colour. In this version they're all blue.
 
-**Change the css such that each piece has a different colour.**
+**Change the css such that each piece has a different colour.** - Done
 
 ### Next Tetromino
 Part of the game state is the next tetromino to descend after the current one
@@ -24,9 +25,10 @@ In most tetris games this is displayed to the player.
 In this module the next tetromino is stored as a property of the game object.
 `game.next_tetromino`.
 
-* Unlike in the online game, you should only show the **one** next piece.
+* Unlike in the online game, you should only show the **one** next piece. - Done
 
 **Add a display of the next tetromino to the sidebar**
+
 
 ### Hold Piece
 One feature you often see in Tetris games is the ability to *hold* a piece.
@@ -40,13 +42,13 @@ See https://tetris.com/play-tetris for an example of how this works.
 
 **You are going to implement the hold mechanism.**
 1. Add to the documentation of type definition of a `Tetris.Game` (line 16) two fields:
-    1. `held_tetromino`, the tetromino you are holding.
-    2. `can_hold`, a boolean that determines if holding is allowed.
-2. Modify the `Tetris.new_game()` function to have these new fields, and have sensible initial values.
-3. Modify `Tetris.next_turn()` so that the next turn returned also has these two fields.
-4. Document in **jsdoc** a new function `Tetris.hold()` that takes a game, and returns a new game with the current tetromino held.
-5. Implement the `Tetris.hold()` function as specified.
-6. Modify `main.js` to listen for the `c` key being pressed, and holds the piece when triggered.
+    1. `held_tetromino`, the tetromino you are holding. - Done
+    2. `can_hold`, a boolean that determines if holding is allowed. - Done
+2. Modify the `Tetris.new_game()` function to have these new fields, and have sensible initial values. - Done
+3. Modify `Tetris.next_turn()` so that the next turn returned also has these two fields. - Done
+4. Document in **jsdoc** a new function `Tetris.hold()` that takes a game, and returns a new game with the current tetromino held. - Done
+5. Implement the `Tetris.hold()` function as specified. - Done
+6. Modify `main.js` to listen for the `c` key being pressed, and holds the piece when triggered. - Done
 7. Add a display of the held piece to the UI.
 
 ### Hold Piece - Unit Tests
