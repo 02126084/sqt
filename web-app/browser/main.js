@@ -10,6 +10,7 @@ document.documentElement.style.setProperty("--grid-columns", grid_columns);
 
 const grid = document.getElementById("grid");
 const sidegrid = document.getElementById("sidegrid");
+const sidegrid_2 = document.getElementById("sidegrid_2")
 
 const range = (n) => Array.from({"length": n}, (ignore, k) => k);
 
@@ -59,9 +60,7 @@ const sidecells = range(2).map(function () {
     const rows = range(4).map(function () {
         const cell = document.createElement("div");
         cell.className = "cell";
-
         row.append(cell);
-
         return cell;
     });
 
@@ -83,6 +82,43 @@ const update_sidegrid = function () {
                 const cell = sidecells[coord[1]][coord[0]];
                 cell.className = (
                     `cell ${game.held_tetromino.block_type}`
+                );
+            } catch (ignore) {
+
+            }
+        }
+    );
+};
+
+const sidecells_2 = range(2).map(function () {
+    const row = document.createElement("div");
+    row.className = "row";
+
+    const rows = range(4).map(function () {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        row.append(cell);
+        return cell;
+    });
+
+    sidegrid_2.append(row);
+    return rows;
+});
+
+const update_sidegrid_2 = function () {
+    sidecells_2.forEach(function (line, line_index) {
+        line.forEach(function (block, column_index) {
+            const cell = sidecells_2[line_index][column_index];
+            cell.className = `cell sidebar`;
+        });
+    });
+
+    Tetris.tetromino_coordiates(game.next_tetromino, [1, 0]).forEach(
+        function (coord) {
+            try {
+                const cell = sidecells_2[coord[1]][coord[0]];
+                cell.className = (
+                    `cell ${game.next_tetromino.block_type}`
                 );
             } catch (ignore) {
 
@@ -123,12 +159,14 @@ document.body.onkeydown = function (event) {
 
 const timer_function = function () {
     game = Tetris.next_turn(game);
+    update_sidegrid_2();
     update_sidegrid();
     update_grid();
     setTimeout(timer_function, 500);
 };
 
 setTimeout(timer_function, 500);
+update_sidegrid_2();
 update_sidegrid();
 update_grid();
 

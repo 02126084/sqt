@@ -118,21 +118,25 @@ footer
 
 .sidegrid
 {
-    aspect-ratio: 0.5;
-    margin-top: 250px;
-    margin-left: 25px;
-    width: 600px;
+    height: 64px;
+    aspect-ratio: 4;
 }
 
 .sidegrid_2
 {
-    aspect-ratio: 0.5;
-    margin-top: 600px;
-    margin-left: 25px;
-    width: 600px;
+    height: 64px;
+    aspect-ratio: 4;
 }
 
-.row
+.sidegrid .row, .sidegrid_2 .row {
+    height: calc(50%);
+    position: relative;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.grid .row
 {
     height: calc(100% / var(--grid-rows));
     position: relative;

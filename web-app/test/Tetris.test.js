@@ -32,10 +32,10 @@ describe("Hold", function () {
         When one further Hold is performed;
         Then the game state before and after the second hold, is the same.`,
         function () {
-            const initial_game = Tetris.new_game();
+            const initial_game = Tetris.hold(Tetris.new_game());
             const initial_piece = initial_game.current_tetromino;
             const final_game = Tetis.hold(
-                Tetris.hold(initial_game)
+                (initial_game)
             )
             const final_piece = final_game.current_tetromino;
             if (R.equals(initial_piece, final_piece)) {
@@ -57,10 +57,10 @@ describe("Hold", function () {
                 initial_game
             )
             const final_piece = final_game.current_tetromino;
-            if (!R.equals(initial_piece, final_piece)) {
+            if (!R.equals(next_piece, final_piece)) {
                 throw new Error(
                     `The inital and final tetrominos do not match
-                    Initial: ${JSON.stringify(initial_piece)}
+                    Initial: ${JSON.stringify(next_piece)}
                     Final:   ${JSON.stringify(final_piece)}`
                 );
             }       
