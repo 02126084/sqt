@@ -119,18 +119,19 @@ footer
 .sidegrid
 {
     aspect-ratio: 0.5;
-    /* background: var(--palette-base0); */
-    /* margin: 100;
-    margin-left: auto ;
-    margin-right: auto;
-    padding: 0;
-    position: relative; */
-    /* max-height: 100%;
-    max-width: 100%; */
     margin-top: 250px;
     margin-left: 25px;
     width: 600px;
 }
+
+.sidegrid_2
+{
+    aspect-ratio: 0.5;
+    margin-top: 600px;
+    margin-left: 25px;
+    width: 600px;
+}
+
 .row
 {
     height: calc(100% / var(--grid-rows));
@@ -186,11 +187,6 @@ footer
 {
     background-color: var(--palette-secondary7);
 }
-
-/* .cell.current
-{
-    background-color: var(--palette-accent2);
-} */
 
 .cell.sidebar
 {

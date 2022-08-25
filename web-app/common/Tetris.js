@@ -325,17 +325,20 @@ Tetris.new_game = function () {
  * @returns {number[][]} The List of  coordinates `[x, y]` of each block.
  */
 Tetris.tetromino_coordiates = function (tetromino, position) {
-    return tetromino.grid.flatMap(function (row, row_index) {
-        return row.flatMap(function (block, column_index) {
-            if (block === empty_block) {
-                return [];
-            }
-            return [[
-                position[0] + column_index - Math.floor(tetromino.centre[0]),
-                position[1] + row_index - Math.floor(tetromino.centre[1])
-            ]];
+    if (tetromino!=undefined) {
+        return tetromino.grid.flatMap(function (row, row_index) {
+            return row.flatMap(function (block, column_index) {
+                if (block === empty_block) {
+                    return [];
+                }
+                return [[
+                    position[0] + column_index - Math.floor(tetromino.centre[0]),
+                    position[1] + row_index - Math.floor(tetromino.centre[1])
+                ]];
+            });
         });
-    });
+    };
+    return []
 };
 
 const is_blocked_bottom = function (tetromino, position) {
@@ -600,7 +603,7 @@ Tetris.next_turn = function (game) {
         "next_tetromino": next_tetromino,
         "position": starting_position,
         "score": game.score,
-        "can_hold": game.can_hold,
+        "can_hold": true,
         "held_tetromino": game.held_tetromino,
         
     };
@@ -631,25 +634,26 @@ const holdPiece = state => {
  * @returns {Tetris.Game}
  */
 Tetris.hold = function (game) {
+
     if (Tetris.is_game_over(game)) {
         return game;
     }
-    console.log(game.held_tetromino===undefined)
-    if (game.held_tetromino===undefined) {
-        game = R.mergeRight(game, {"held_tetromino": game.current_tetromino});
-
-        game = R.mergeRight(game, {"current_tetromino": game.next_tetromino});
-        const [next_tetromino, next_bag] = game.bag();
-        game = R.mergeRight(game, {"bag": next_bag});
-        game = R.mergeRight(game, {"next_tetromino": next_tetromino});
-    }
-    else {
-        const temp = game.current_tetromino
-        game = R.mergeRight(game, {"current_tetromino": game.held_tetromino});
-        game = R.mergeRight(game, {"held_tetromino": temp});
+    if (game.can_hold)  {
+        if (game.held_tetromino===undefined) {
+            game = R.mergeRight(game, {"held_tetromino": game.current_tetromino});
+            game = R.mergeRight(game, {"current_tetromino": game.next_tetromino});
+            const [next_tetromino, next_bag] = game.bag();
+            game = R.mergeRight(game, {"bag": next_bag});
+            game = R.mergeRight(game, {"next_tetromino": next_tetromino});
+        }
+        else {
+            const temp = game.current_tetromino
+            game = R.mergeRight(game, {"current_tetromino": game.held_tetromino});
+            game = R.mergeRight(game, {"held_tetromino": temp});
+        }
+        game.can_hold=false
     }
     return game
-    
 };
 
 /**

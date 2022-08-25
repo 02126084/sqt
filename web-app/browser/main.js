@@ -77,12 +77,12 @@ const update_sidegrid = function () {
         });
     });
 
-    Tetris.tetromino_coordiates(game.next_tetromino, [1, 0]).forEach(
+    Tetris.tetromino_coordiates(game.held_tetromino, [1, 0]).forEach(
         function (coord) {
             try {
                 const cell = sidecells[coord[1]][coord[0]];
                 cell.className = (
-                    `cell ${game.next_tetromino.block_type}`
+                    `cell ${game.held_tetromino.block_type}`
                 );
             } catch (ignore) {
 

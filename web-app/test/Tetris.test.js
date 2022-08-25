@@ -10,7 +10,6 @@ describe("Hold", function () {
         function () {
             const initial_game = Tetris.new_game();
             const initial_piece = initial_game.current_tetromino;
-            // You'll need to implement Tetris.hold before this works.
             const final_game = Tetris.hold(
                 Tetris.hard_drop(
                     Tetris.hold(initial_game)
@@ -33,15 +32,38 @@ describe("Hold", function () {
         When one further Hold is performed;
         Then the game state before and after the second hold, is the same.`,
         function () {
-            const initial_game = Tetris.hold(Tetris.new_game());
-            // Implement the rest of this function.
+            const initial_game = Tetris.new_game();
+            const initial_piece = initial_game.current_tetromino;
+            const final_game = Tetis.hold(
+                Tetris.hold(initial_game)
+            )
+            const final_piece = final_game.current_tetromino;
+            if (R.equals(initial_piece, final_piece)) {
+                throw new Error(
+                    `The inital and final tetrominos match
+                    Initial: ${JSON.stringify(initial_piece)}
+                    Final:   ${JSON.stringify(final_piece)}`
+                );
+            }
         }
     );
 
     it(
-        `### Change this to your test description ###`,
+        `If there is no held piece and a hold performed, the **next tetromino** is deployed`,
         function () {
-            // Implement this function.
+            const initial_game = Tetris.new_game();
+            const next_piece = initial_game.next_tetromino;
+            const final_game = Tetris.hold(
+                initial_game
+            )
+            const final_piece = final_game.current_tetromino;
+            if (!R.equals(initial_piece, final_piece)) {
+                throw new Error(
+                    `The inital and final tetrominos do not match
+                    Initial: ${JSON.stringify(initial_piece)}
+                    Final:   ${JSON.stringify(final_piece)}`
+                );
+            }       
         }
     );
 });
